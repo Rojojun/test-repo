@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>Title</title>
+
+    <style>
+        .hidden {
+            display: none !important;
+        }
+    </style>
+
+    <script>
+        function printname() {
+            let username = $('#username').val();
+            $('#show-user').innerText = username;
+        }
+
+        let maxLengthPsw = 12;
+
+        $(document).ready(function () {
+            getPost();
+        })
+
+        function getPost() {
+            $('#cardbox').empty()
+            $.ajax({
+                type: 'GET',
+                url: '/api/get/boards',
+                success: function (response) {
+                    console.log(response);
+                    for (let i = 0; i < response.length; i ++) {
+                        let message = response[i];
+                        let id = message['id'];
+                        let username = message['username'];
+                        let title = message['title'];
+                        let createdAt = message['createdAt'];
+                        let view = 0;
+                        let commnets = 0;
+                        console.log(message);
+                        console.log(id,username,title, createdAt)
+
+                        addHtml(id, username, title, createdAt , view, commnets)
+                    }
+                }
+            })
+        }
+
+        // Not yet to get view, comments
+        function addHtml(id, username, title, createdAt, view, comments) {
+            let tempHtml = `
+            <tr id="${id}-cardbox" style="border: solid">
+            <td style="border: solid">${id}</td>
+            <td style="border: solid">${title}</td>
+            <td style="border: solid">${username}</td>
+            <td style="border: solid">${comments}</td>
+            <td style="border: solid">${view}</td>
+            <td style="border: solid">${createdAt}</td>
+        </tr>`
+            $('#addcard').append(tempHtml);
+        }
+
+        function isValidContents(contents) {
+            if (contents == '') {
+                alert('내용을 입력해주세요');
+                return false;
+            }
+            if (contents.trim().length > 140) {
+                alert('공백 포함 140자 이하로 입력해주세요');
+                return false;
+            }
+            return true;
+        }
+
+        function writePost() {
+            let contents = $('#contents').val();
+            let username = $('#username').val();
+            let title = $('#title').val();
+            let unanimousPassword = $('#unanimousPassword').val();
+
+            if (isValidContents(contents) == false) {
+                return;
+            }
+
+            let data = {username: username,
+                        contents: contents,
+                        title: title,
+                        unanimousPassword:unanimousPassword};
+
+            $.ajax({
+                type: "POST",
+                url: "/api/post/boards",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8;",
+                data: JSON.stringify(data),
+                success: function (response) {
+                    alert('게시글 작성 완료');
+                    window.location.reload();
+                    }
+                })
+        }
+
+
+
+
+
+
+        function on_login() {
+            $('#login-input').toggleClass("hidden");
+            $('#show-login').toggleClass("hidden");
+            $('#cancel-login').toggleClass("hidden");
+            $('#login').toggleClass("hidden");
+        }
+
+        function on_wirte() {
+            $('#write').toggleClass("hidden")
+        }
+
+        function annanimous() {
+            $('#annanimous').toggleClass("hidden");
+            $('#annanimous-cancel').toggleClass("hidden");
+            $('#annanimous-write').toggleClass("hidden");
+        }
+    </script>
+</head>
+<body>
+<div>
+    <!--유저페이지-->
+    <button>회원가입</button>
+    <button id="show-login" onclick="on_login()">로그인</button>
+    <button id="login" class="hidden">로그인</button>
+    <button id="cancel-login" class="hidden" onclick="on_login()">로그인취소</button>
+    <input type="text"  value="${username}"  hidden  />
+    <input type="password"  hidden />
+</div>
+<div>
+    <button onclick="on_wirte()">글쓰기</button>
+</div>
+<div>
+    <span th:text="${Users.nickname}"></span>님 반갑습니다!
+</div>
+<!--글 작성-->
+<div id="write" class="hidden">
+    <p>
+        <button id="annanimous-write" onclick="annanimous()">
+            비회원으로 작성하기
+        </button>
+    </p>
+    <div id="annanimous" class="hidden">
+        닉네임 : <input id="username" type="text"  onclick="printname()"/>
+        password : <input id="unanimousPassword" type="password"/>
+    </div>
+    <h3>제목</h3>
+    <input id="title" type="text">
+    <p> 작성자 <span id="show-user">비회원</span></p>
+   <h3>내용</h3> <textarea id="contents" style="width: 540px; height: 80px"></textarea>
+        <p><button id="annanimous-cancel" onclick="annanimous()" class="hidden">취소</button>
+        <button onclick="writePost()">업로드</button>
+</div>
+<!--게시글 목록-->
+<div>
+    <table id="addcard" style="border: solid">
+        <tr style="border: solid">
+            <td style="border: solid">번호</td>
+            <td style="border: solid">제목</td>
+            <td style="border: solid">작성자</td>
+            <td style="border: solid">댓글수</td>
+            <td style="border: solid">조회수</td>
+            <td style="border: solid">작성일</td>
+        </tr>
+        <tr id="cardbox" style="border: solid">
+            <td style="border: solid">1</td>
+            <td style="border: solid">제목을 입력하라고 멍청아!</td>
+            <td style="border: solid">바나나가웃으면바나나킥</td>
+            <td style="border: solid">13</td>
+            <td style="border: solid">2</td>
+            <td style="border: solid">2022-05-27</td>
+        </tr>
+    </table>
+    <div>
+        <a href=""><<</a>
+        <a href="">1</a>
+        <a href="">2</a>
+        <a href="">>></a>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        .hidden {
+            display: none !important;
+        }
+    </style>
+    <script>
+        function edit() {
+            $('#edit_txt').toggleClass("hidden");
+            $('#contents').toggleClass("hidden");
+            $('#edit_done').toggleClass("hidden");
+            $('#edit_cancel').toggleClass("hidden");
+            $('#content-title').toggleClass("hidden");
+            $('#title-edit').toggleClass("hidden");
+        }
+    </script>
+</head>
+<body>
+<div>
+    <p>제목 <span id="content-title">파란나라가 어딨냨ㅋㅋㅋㅋ</span><input id="title-edit" class="hidden"></input></p>
+    <p>작성자 <span>퍼렁별</span></p>
+    <p>작성시간 <span>2022-05-27 00:00:00</span></p>
+    <p>수정시간 <span>2022-05-27 00:00:00</span></p>
+    <p>내용
+    <div id="contents" style="height: 80px; width: 540px; border: solid;">파란나라를 보아보았늬~</div>
+    <div id="edit_txt" class="hidden">
+        <textarea style="width: 540px; height: 80px"></textarea>
+        <p> password : <input type="password" disabled/>
+    </div>
+    <div>
+        <button onclick="edit()" id="edit_cancel" class="hidden">수정취소</button>
+        <button onclick="edit()">글 수정</button>
+        <button>글 삭제</button>
+    </div>
+</div>
+<!--댓글-->
+<table>
+    <tr>
+        <td style="border: solid">번호</td>
+        <td style="border: solid">작성자</td>
+        <td style="border: solid">댓글내용</td>
+        <td style="border: solid">등록일</td>
+    </tr>
+    <tr>
+        <td style="border: solid">1</td>
+        <td style="border: solid">나타샤로마노프</td>
+        <td style="border: solid">호크아이 개약함 ㅋㅋㅋ 나한테 개털림 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ 개허졉샊ㅋㅋㅋㅋㅋ</td>
+        <td style="border: solid">2022-05-27</td>
+    </tr>
+</table>
+<!--댓글등록-->
+<div>
+<input placeholder="비회원">
+<input style="width: 580px"><button>댓글등록</button>
+</div>
+</body>
+</html>
